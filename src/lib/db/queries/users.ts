@@ -13,3 +13,16 @@ export async function getUser(name: string) {
 
 	return result
 }
+
+export async function resetUsers() {
+	console.log("calling db.delete(users)")
+	const count = await db.delete(users).returning()
+
+	return count
+}
+
+export async function getUsers() {
+	const results = await db.select().from(users)
+
+	return results
+}

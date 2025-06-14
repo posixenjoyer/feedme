@@ -12,11 +12,17 @@ async function main() {
 
 	Handlers.registerCommand(registry, "login", Handlers.handlerLogin)
 	Handlers.registerCommand(registry, "register", Handlers.handlerRegister)
+	Handlers.registerCommand(registry, "reset", Handlers.handlerReset)
+	Handlers.registerCommand(registry, "users", Handlers.handlerUsers)
+	Handlers.registerCommand(registry, "agg", Handlers.handlerAgg)
 
 	const cmdName = process.argv[2]
 	const handlerArgs = process.argv.slice(3)
 
-	if (handlerArgs.length < 1) {
+	if (handlerArgs.length < 1
+		&& (cmdName !== "reset"
+			&& cmdName !== "users"
+			&& cmdName !== "agg")) {
 		console.log("You need to supply command argument(s)...")
 		process.exit(1)
 	}

@@ -1,6 +1,7 @@
 import { warn } from "console";
-import { setUser } from "./config"
-import { createUser, getUser } from "./lib/db/queries/users"
+import { readConfig, setUser } from "./config"
+import { createUser, resetUsers, getUser, getUsers } from "./lib/db/queries/users"
+import { fetchFeed } from "./web"
 
 export type CommandHandler = (cmdName: string, ...args: string[]) => Promise<void>;
 
@@ -46,4 +47,28 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
 	setUser(args[0])
 
 	console.log(`User ${args[0]} was created.`)
+}
+
+export async function handlerReset(cmdName: string, ...args: string[]) {
+	const delete_count = await resetUsers()
+}
+
+export async function handlerUsers(cmdName: string, ...args: string[]) {
+	const results = await getUsers()
+
+	const currentUser = readConfig().currentUserName
+
+	console.log("Printing User List...")
+	for (const user of results) {
+		if (user.name === currentUser) {
+			console.log(`${user.name} (current)`)
+		} else {
+			console.log(`${user.name}`)
+		}
+	}
+}
+
+export async function handlerAgg(cmdName: string, ...args: string[]) {
+	const feed = await fetchFeed("https://www.wagslane.dev/index.xml")
+	console.log(`${JSON.stringify(feed)}}`)
 }
