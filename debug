@@ -1,0 +1,206 @@
+[?25l[?2004h [0D[2K[?2004l[?25h[?1002l[?1003l[?1006l╭──────────────────────────────╮
+│ Running: npm run start reset │
+╰┬─────────────────────────────╯
+ ├─  ?  Expect exit code 0
+
+ > Command exit code: 0
+ > Command stdout:
+
+
+> feedme@1.0.0 start
+> tsx ./src/index.ts reset
+
+calling db.delete(users)
+╭───────────────────────────────────────╮
+│ Running: npm run start register kahya │
+╰┬──────────────────────────────────────╯
+ ├─  ?  Expect exit code 0
+
+ > Command exit code: 0
+ > Command stdout:
+
+
+> feedme@1.0.0 start
+> tsx ./src/index.ts register kahya
+
+User kahya was created.
+╭─────────────────────────────────────────────────────────────────────────────╮
+│ Running: npm run start addfeed "Hacker News RSS" "https://hnrss.org/newest" │
+╰┬────────────────────────────────────────────────────────────────────────────╯
+ ├─  ?  Expect exit code 0
+
+ > Command exit code: 1
+ > Command stdout:
+
+
+> feedme@1.0.0 start
+> tsx ./src/index.ts addfeed Hacker News RSS https://hnrss.org/newest
+
+/home/devvy/work/github.com/posixenjoyer/feedme/node_modules/src/pg-core/session.ts:74
+                throw new DrizzleQueryError(queryString, params, e as Error);
+                      ^
+
+
+DrizzleQueryError: Failed query: select "user_id" from "feeds" where "feeds"."id" = $1
+params: https://hnrss.org/newest
+    at PostgresJsPreparedQuery.queryWithCache (/home/devvy/work/github.com/posixenjoyer/feedme/node_modules/src/pg-core/session.ts:74:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (/home/devvy/work/github.com/posixenjoyer/feedme/node_modules/src/postgres-js/session.ts:58:17)
+    at async getUserFromFeed (/home/devvy/work/github.com/posixenjoyer/feedme/src/lib/db/queries/feeds.ts:20:17)
+    at async createFeedFollows (/home/devvy/work/github.com/posixenjoyer/feedme/src/lib/db/queries/feeds.ts:46:21)
+    at async Map.handlerAddfeed (/home/devvy/work/github.com/posixenjoyer/feedme/src/handlers.ts:110:2)
+    at async main (/home/devvy/work/github.com/posixenjoyer/feedme/src/index.ts:37:2) {
+  query: 'select "user_id" from "feeds" where "feeds"."id" = $1',
+  params: [ 'https://hnrss.org/newest' ],
+  cause: PostgresError: invalid input syntax for type uuid: "https://hnrss.org/newest"
+      at ErrorResponse (file:///home/devvy/work/github.com/posixenjoyer/feedme/node_modules/postgres/src/connection.js:794:26)
+      at handle (file:///home/devvy/work/github.com/posixenjoyer/feedme/node_modules/postgres/src/connection.js:480:6)
+      at Socket.data (file:///home/devvy/work/github.com/posixenjoyer/feedme/node_modules/postgres/src/connection.js:315:9)
+      at Socket.emit (node:events:507:28)
+      at addChunk (node:internal/streams/readable:559:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+      at Readable.push (node:internal/streams/readable:390:5)
+      at TCP.onStreamRead (node:internal/stream_base_commons:189:23) {
+    severity_local: 'ERROR',
+    severity: 'ERROR',
+    code: '22P02',
+    where: "unnamed portal parameter $1 = '...'",
+    file: 'uuid.c',
+    line: '138',
+    routine: 'string_to_uuid'
+  }
+}
+
+Node.js v24.2.0
+╭─────────────────────────────────────────╮
+│ Running: npm run start register holgith │
+╰┬────────────────────────────────────────╯
+ ├─  ?  Expect exit code 0
+
+ > Command exit code: 0
+ > Command stdout:
+
+
+> feedme@1.0.0 start
+> tsx ./src/index.ts register holgith
+
+User holgith was created.
+╭──────────────────────────────────────────────────────────────────────────────────╮
+│ Running: npm run start addfeed "Lanes Blog" "https://www.wagslane.dev/index.xml" │
+╰┬─────────────────────────────────────────────────────────────────────────────────╯
+ ├─  ?  Expect exit code 0
+
+ > Command exit code: 1
+ > Command stdout:
+
+
+> feedme@1.0.0 start
+> tsx ./src/index.ts addfeed Lanes Blog https://www.wagslane.dev/index.xml
+
+/home/devvy/work/github.com/posixenjoyer/feedme/node_modules/src/pg-core/session.ts:74
+                throw new DrizzleQueryError(queryString, params, e as Error);
+                      ^
+
+
+DrizzleQueryError: Failed query: select "user_id" from "feeds" where "feeds"."id" = $1
+params: https://www.wagslane.dev/index.xml
+    at PostgresJsPreparedQuery.queryWithCache (/home/devvy/work/github.com/posixenjoyer/feedme/node_modules/src/pg-core/session.ts:74:11)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async <anonymous> (/home/devvy/work/github.com/posixenjoyer/feedme/node_modules/src/postgres-js/session.ts:58:17)
+    at async getUserFromFeed (/home/devvy/work/github.com/posixenjoyer/feedme/src/lib/db/queries/feeds.ts:20:17)
+    at async createFeedFollows (/home/devvy/work/github.com/posixenjoyer/feedme/src/lib/db/queries/feeds.ts:46:21)
+    at async Map.handlerAddfeed (/home/devvy/work/github.com/posixenjoyer/feedme/src/handlers.ts:110:2)
+    at async main (/home/devvy/work/github.com/posixenjoyer/feedme/src/index.ts:37:2) {
+  query: 'select "user_id" from "feeds" where "feeds"."id" = $1',
+  params: [ 'https://www.wagslane.dev/index.xml' ],
+  cause: PostgresError: invalid input syntax for type uuid: "https://www.wagslane.dev/index.xml"
+      at ErrorResponse (file:///home/devvy/work/github.com/posixenjoyer/feedme/node_modules/postgres/src/connection.js:794:26)
+      at handle (file:///home/devvy/work/github.com/posixenjoyer/feedme/node_modules/postgres/src/connection.js:480:6)
+      at Socket.data (file:///home/devvy/work/github.com/posixenjoyer/feedme/node_modules/postgres/src/connection.js:315:9)
+      at Socket.emit (node:events:507:28)
+      at addChunk (node:internal/streams/readable:559:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:510:3)
+      at Readable.push (node:internal/streams/readable:390:5)
+      at TCP.onStreamRead (node:internal/stream_base_commons:189:23) {
+    severity_local: 'ERROR',
+    severity: 'ERROR',
+    code: '22P02',
+    where: "unnamed portal parameter $1 = '...'",
+    file: 'uuid.c',
+    line: '138',
+    routine: 'string_to_uuid'
+  }
+}
+
+Node.js v24.2.0
+╭──────────────────────────────────────────────────────────╮
+│ Running: npm run start follow "https://hnrss.org/newest" │
+╰┬─────────────────────────────────────────────────────────╯
+ ├─  ?  Expect exit code 0
+
+ > Command exit code: 0
+ > Command stdout:
+
+
+> feedme@1.0.0 start
+> tsx ./src/index.ts follow https://hnrss.org/newest
+
+Feed.keys:  [ 'id', 'createdAt', 'updatedAt', 'user_id', 'feed_id' ]
+Result:  [ '0' ]
+Feed id:  1614fb67-0bc2-4c3b-a70a-7323dd12e936
+Title:  Hacker News RSS
+Url:  https://hnrss.org/newest
+User:  holgith
+CreatedAt:  2025-06-19T02:21:35.038Z
+UpdatedAt:  2025-06-19T02:21:35.038Z
+╭──────────────────────────────────╮
+│ Running: npm run start following │
+╰┬─────────────────────────────────╯
+ ├─  ?  Expect exit code 0
+ ├─  ?  Expect stdout to contain all of:
+ │       - 'Hacker News RSS'            
+ │       - 'Lanes Blog'                 
+
+ > Command exit code: 0
+ > Command stdout:
+
+
+> feedme@1.0.0 start
+> tsx ./src/index.ts following
+
+Feed id:  1614fb67-0bc2-4c3b-a70a-7323dd12e936
+Title:  Hacker News RSS
+Url:  https://hnrss.org/newest
+User:  holgith
+CreatedAt:  2025-06-19T02:21:35.038Z
+UpdatedAt:  2025-06-19T02:21:35.038Z
+╭────────────────────────────────────╮
+│ Running: npm run start login kahya │
+╰┬───────────────────────────────────╯
+ ├─  ?  Expect exit code 0
+
+ > Command exit code: 0
+ > Command stdout:
+
+
+> feedme@1.0.0 start
+> tsx ./src/index.ts login kahya
+
+Type: string
+User: object
+Username set to: kahya
+╭──────────────────────────────────╮
+│ Running: npm run start following │
+╰┬─────────────────────────────────╯
+ ├─  ?  Expect exit code 0
+ ├─  ?  Expect stdout to contain all of:
+ │       - 'Hacker News RSS'            
+ ├─  ?  Expect stdout to contain none of:
+ │       - 'Lanes Blog'                  
+
+ > Command exit code: 0
+ > Command stdout:
+
+
+> feedme@1.0.0 start
+> tsx ./src/index.ts following

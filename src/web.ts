@@ -1,18 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
 
-type RSSFeed = {
-	title: string,
-	link: string,
-	description: string,
-	item: RSSItem[],
-}
-
-type RSSItem = {
-	title: string,
-	link: string,
-	description: string,
-	pubDate: string,
-}
+import { RSSFeed, RSSItem } from "./rss"
 
 export async function fetchFeed(feedUrl: string) {
 	const RSSResponse = await fetch(feedUrl, {

@@ -8,6 +8,34 @@
       "when": 1749893357478,
       "tag": "0000_magical_exiles",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749973227320,
+      "tag": "0001_normal_lord_tyger",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1750185688660,
+      "tag": "0002_flowery_peter_quill",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1750263036035,
+      "tag": "0003_deep_morgan_stark",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1750263620801,
+      "tag": "0004_material_celestials",
+      "breakpoints": true
     }
   ]
 }

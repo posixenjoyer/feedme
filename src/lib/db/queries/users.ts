@@ -10,10 +10,24 @@ export async function createUser(name: string) {
 
 export async function getUser(name: string) {
 	const result = await db.select().from(users).where(eq(users.name, name));
-
 	return result
 }
 
+export async function getUserId(name: string) {
+	const result = await db.select().from(users).where(eq(users.name, name));
+	if (!result[0]["id"]) {
+		throw Error(`User not found: ${name}!`);
+	}
+	return result[0]["id"]
+}
+
+export async function getUsernameFromId(id: string) {
+	const result = await db.select().from(users).where(eq(users.id, id))
+	if (!result[0]["name"]) {
+		throw Error(`User not found for ID: ${id}`)
+	}
+	return result[0]["name"]
+}
 export async function resetUsers() {
 	console.log("calling db.delete(users)")
 	const count = await db.delete(users).returning()

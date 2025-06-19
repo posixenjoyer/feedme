@@ -31,6 +31,7 @@ function validateConfig(rawConfig: any) {
 	}
 
 	if (!rawConfig.current_user_name || typeof rawConfig.current_user_name !== "string") {
+		console.log(`Username: ${rawConfig.current_user_name}, type: ${typeof rawConfig.current_user_name}`)
 		throw Error("The supplied username is not validly formatted.")
 	}
 
@@ -54,9 +55,15 @@ function getConfigFilePath() {
 function writeConfig(config: Config) {
 	const configPath = getConfigFilePath()
 
+	let userName = config.currentUserName
+
+	if (Array.isArray(config.currentUserName)) {
+		userName = config.currentUserName[0]
+	}
+
 	const rawConfig = {
 		db_url: config.dbUrl,
-		current_user_name: config.currentUserName,
+		current_user_name: userName,
 	};
 
 	const configData = JSON.stringify(rawConfig, null, 2)

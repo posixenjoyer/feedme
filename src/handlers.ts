@@ -1,7 +1,12 @@
 import { warn } from "console";
 import { readConfig, setUser } from "./config"
-import { createUser, resetUsers, getUser, getUsers } from "./lib/db/queries/users"
+import { createUser, resetUsers, getUser, getUsers, getUserId, getUsernameFromId } from "./lib/db/queries/users"
+import { createFeedFollows, getAllFeeds, getFeedId, getFeed, type Feed, getUserFollows } from "./lib/db/queries/feeds"
 import { fetchFeed } from "./web"
+import { addFeed, printFeed } from "./feed"
+import { printFollowFeed } from "./follows";
+import { name } from "drizzle-orm";
+import { getUserObjFromName } from "./user";
 
 export type CommandHandler = (cmdName: string, ...args: string[]) => Promise<void>;
 
@@ -53,10 +58,15 @@ export async function handlerReset(cmdName: string, ...args: string[]) {
 	const delete_count = await resetUsers()
 }
 
+function getCurrentUsername() {
+	const currentUser = readConfig().currentUserName
+	return currentUser
+}
+
 export async function handlerUsers(cmdName: string, ...args: string[]) {
 	const results = await getUsers()
 
-	const currentUser = readConfig().currentUserName
+	const currentUser = getCurrentUsername()
 
 	console.log("Printing User List...")
 	for (const user of results) {
@@ -71,4 +81,56 @@ export async function handlerUsers(cmdName: string, ...args: string[]) {
 export async function handlerAgg(cmdName: string, ...args: string[]) {
 	const feed = await fetchFeed("https://www.wagslane.dev/index.xml")
 	console.log(`${JSON.stringify(feed)}}`)
+}
+
+export async function handlerAddfeed(cmdName: string, ...args: string[]) {
+	if (!args[0] || typeof args[0] !== "string") {
+		throw Error("Feed title is missing/incorrect type")
+	}
+
+	if (!args[1] || typeof args[1] !== "string") {
+
+		throw Error("Url is missing/incorrect type")
+	}
+
+	const currentUser = getCurrentUsername()
+
+	const result = await addFeed(args[0], args[1])
+	const feedData = result[0]
+	const feedObj: Feed = {
+		id: feedData["id"],
+		name: feedData["name"],
+		url: feedData["url"],
+		user_id: feedData["user_id"],
+		createdAt: feedData["createdAt"],
+		updatedAt: feedData["updatedAt"]
+	}
+	//	console.log("Feed was added: title: ", args[0], " url: ", args[1])
+	const rawUser = await getUser(currentUser)
+	await createFeedFollows(await getUserId(currentUser), feedObj.id)
+	await printFeed(feedObj, rawUser[0])
+}
+
+export async function handlerGetfeeds(cmdName: string, ...args: string[]) {
+	const result = await getAllFeeds()
+
+	for (const feed of result) {
+		const userName = await getUsernameFromId(feed.user_id)
+		const userObj = await getUser(userName)
+		printFeed(feed, userObj[0])
+	}
+}
+
+export async function handlerAddFollow(cmdName: string, ...args: string[]) {
+	const feed_id = await getFeedId(args[0])
+	const result = await createFeedFollows(await getUserId(getCurrentUsername()), feed_id)
+
+	printFollowFeed(result)
+}
+
+export async function handlerFollows(cmdName: string, ...args: string[]) {
+	const results = await getUserFollows(getCurrentUsername())
+	for (const result of results) {
+		printFollowFeed(result)
+	}
 }
