@@ -26,3 +26,15 @@ export const feed_follows = pgTable("feed_follows", {
 }, (t) => [
 	unique().on(t.user_id, t.feed_id)
 ])
+
+export const followed_feeds = pgTable("followed_feeds", {
+	id: uuid('id').primaryKey().defaultRandom().notNull(),
+	createdAt: timestamp("created_at").notNull().defaultNow(),
+	updatedAt: timestamp("updated_at").notNull().defaultNow(),
+	lastChecked: timestamp("lastChecked").notNull().defaultNow(),
+	name: text("name"),
+	url: text("url").notNull(),
+	feed_id: uuid('feed_id').references(() => feeds.id, { onDelete: 'cascade', }),
+}, (t) => [
+	unique().on(t.feed_id, t.url)
+])

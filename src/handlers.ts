@@ -1,16 +1,27 @@
 import { warn } from "console";
 import { readConfig, setUser } from "./config"
 import { createUser, resetUsers, getUser, getUsers, getUserId, getUsernameFromId } from "./lib/db/queries/users"
-import { createFeedFollows, getAllFeeds, getFeedId, getFeed, type Feed, getUserFollows } from "./lib/db/queries/feeds"
+import {
+	createFeedFollows,
+	getAllFeeds,
+	getFeedId,
+	deleteFeedFollows,
+	type Feed, getUserFollows
+} from "./lib/db/queries/feeds"
 import { fetchFeed } from "./web"
 import { addFeed, printFeed } from "./feed"
 import { printFollowFeed } from "./follows";
-import { name } from "drizzle-orm";
-import { getUserObjFromName } from "./user";
+import { type User } from "./user";
 
 export type CommandHandler = (cmdName: string, ...args: string[]) => Promise<void>;
 
 export type CommandRegistry = Map<string, CommandHandler>;
+
+export type UserCommandHandler = (
+	cmdName: string,
+	user: User,
+	...args: string[]
+) => Promise<void>
 
 export function registerCommand(registry: CommandRegistry, cmdName: string, handler: CommandHandler) {
 	registry[cmdName] = handler
@@ -83,7 +94,7 @@ export async function handlerAgg(cmdName: string, ...args: string[]) {
 	console.log(`${JSON.stringify(feed)}}`)
 }
 
-export async function handlerAddfeed(cmdName: string, ...args: string[]) {
+export async function handlerAddfeed(cmdName: string, user: User, ...args: string[]) {
 	if (!args[0] || typeof args[0] !== "string") {
 		throw Error("Feed title is missing/incorrect type")
 	}
@@ -121,15 +132,20 @@ export async function handlerGetfeeds(cmdName: string, ...args: string[]) {
 	}
 }
 
-export async function handlerAddFollow(cmdName: string, ...args: string[]) {
+export async function handlerAddFollow(cmdName: string, user: User, ...args: string[]) {
 	const feed_id = await getFeedId(args[0])
-	const result = await createFeedFollows(await getUserId(getCurrentUsername()), feed_id)
+	const result = await createFeedFollows(user.id, feed_id)
 
 	printFollowFeed(result)
 }
 
-export async function handlerFollows(cmdName: string, ...args: string[]) {
-	const results = await getUserFollows(getCurrentUsername())
+export async function handlerUnfollow(cmdName: string, user: User, ...args: string[]) {
+	const feed_id = await getFeedId(args[0])
+	const result = await deleteFeedFollows(user.id, feed_id)
+}
+
+export async function handlerFollows(cmdName: string, user: User, ...args: string[]) {
+	const results = await getUserFollows(user.name)
 	for (const result of results) {
 		printFollowFeed(result)
 	}

@@ -1,7 +1,7 @@
 import { db } from "..";
-import { feeds, feed_follows, users } from "../schema";
+import { feeds, feed_follows, users, followed_feeds } from "../schema";
 import { getUser, getUserId, getUsernameFromId } from "./users";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 
 export type Feed = typeof feeds.$inferSelect;
@@ -41,6 +41,14 @@ export async function getUserFollows(username: string) {
 	return result
 }
 
+export async function deleteFeedFollows(user_id: string, feed_id: string) {
+	const [oldFeedFollows] = await db.delete(feed_follows)
+		.where(and(eq(feed_follows.feed_id, feed_id), eq(feed_follows.user_id, user_id)))
+		.returning()
+
+	return oldFeedFollows
+}
+
 export async function createFeedFollows(user_id: string, feed_id: string) {
 
 	const [newFeedFollows] = await db.insert(feed_follows).values({ user_id: user_id, feed_id: feed_id })
@@ -60,13 +68,6 @@ export async function createFeedFollows(user_id: string, feed_id: string) {
 		innerJoin(users, eq(feed_follows.user_id, users.id))
 		.where(eq(feed_follows.id, newFeedFollows.id))
 
-	if (newFeedFollows) {
-		console.log("Feed.keys: ", Object.keys(newFeedFollows))
-	}
-
-	if (result) {
-		console.log("Result: ", Object.keys(result))
-	}
 	return result[0]
 }
 
@@ -78,4 +79,19 @@ export async function getFeed(feed_id: string) {
 export async function getFeedId(url: string) {
 	const result = await db.select().from(feeds).where(eq(feeds.url, url))
 	return result[0]["id"]
+}
+
+export async function createFollowedArticle(url: string, feed_id: string, name?: string) {
+
+	if (!name) {
+		name = "None"
+	}
+
+	const result = db.insert(followed_feeds).values({
+		url: url,
+		feed_id: feed_id,
+		name: name
+	})
+		.returning()
+	return result[0]
 }
