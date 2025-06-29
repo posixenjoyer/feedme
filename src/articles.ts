@@ -1,7 +1,28 @@
 import * as article from "./lib/db/queries/articles"
 
-export async function createArticle(url: string, feed_id: string, title: string) {
-	return article.createArticle(url, feed_id, title)
+export interface RSSItem {
+	title?: string,
+	link?: string,
+	url?: string,
+	description?: string,
+	pubDate?: string,
+}
+
+export async function createArticle(rssItem: RSSItem, feed_id: string) {
+	if (!rssItem.link) {
+		console.log("rssItem: ", rssItem)
+		throw Error("Bad article URL")
+	}
+
+	if (!rssItem.title) {
+		rssItem.title = "None."
+	}
+
+	if (!rssItem.description) {
+		rssItem.description = "None."
+	}
+
+	return article.createArticle(rssItem.link, feed_id, rssItem.title, rssItem.description, rssItem.pubDate)
 }
 
 export async function getArticleTitle(url: string) {

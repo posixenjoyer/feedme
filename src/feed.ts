@@ -5,7 +5,7 @@ import { User } from "./user"
 import { Article } from "./lib/db/queries/articles"
 import { readConfig } from "./config"
 import { XMLParser } from "fast-xml-parser"
-import { createArticle } from "./articles"
+import { createArticle, type RSSItem } from "./articles"
 
 export type Feed = typeof feeds.$inferSelect
 
@@ -43,7 +43,7 @@ export async function addFeedArticles(feedUrl: string, feed: string) {
 	const rssXML = dataParser.parse(await data.text())
 
 	for (const item of rssXML["rss"]["channel"]["item"]) {
-		const result = await createArticle(item["link"], feed, item["title"])
-		console.log("Item url: ", result["url"])
+		const result = await createArticle(item, feed)
+		console.log("Item url: ", result)
 	}
 }

@@ -32,7 +32,9 @@ export const articles = pgTable("articles", {
 	id: uuid('id').primaryKey().defaultRandom().notNull(),
 	createdAt: timestamp("created_at").notNull().defaultNow(),
 	updatedAt: timestamp("updated_at").notNull().defaultNow(),
+	publishedAt: timestamp("publishedAt"),
 	name: text("name"),
+	description: text("description"),
 	url: text("url").notNull(),
 	feed_id: uuid('feed_id').references(() => feeds.id, { onDelete: 'cascade', }),
 }, (t) => [
