@@ -9,7 +9,7 @@ import {
 	type Feed, getUserFollows
 } from "./lib/db/queries/feeds"
 import { fetchFeed } from "./web"
-import { addFeed, printFeed } from "./feed"
+import { addFeed, printFeed, addFeedArticles } from "./feed"
 import { printFollowFeed } from "./follows";
 import { type User } from "./user";
 
@@ -119,6 +119,7 @@ export async function handlerAddfeed(cmdName: string, user: User, ...args: strin
 	//	console.log("Feed was added: title: ", args[0], " url: ", args[1])
 	const rawUser = await getUser(currentUser)
 	await createFeedFollows(await getUserId(currentUser), feedObj.id)
+	await addFeedArticles(feedObj.url, feedObj.id);
 	await printFeed(feedObj, rawUser[0])
 }
 

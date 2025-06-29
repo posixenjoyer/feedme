@@ -2,7 +2,10 @@ import { feeds } from "./lib/db/schema"
 import { createFeed, getAllFeeds } from "./lib/db/queries/feeds"
 import { getUserId } from "./lib/db/queries/users"
 import { User } from "./user"
+import { Article } from "./lib/db/queries/articles"
 import { readConfig } from "./config"
+import { XMLParser } from "fast-xml-parser"
+import { createArticle } from "./articles"
 
 export type Feed = typeof feeds.$inferSelect
 
@@ -31,4 +34,16 @@ export async function printFeed(feed: Feed, user: User) {
 	console.log("Created-at: ", feed.createdAt)
 
 	console.log("User: ", user["name"])
+}
+
+export async function addFeedArticles(feedUrl: string, feed: string) {
+	const data = await fetch(feedUrl)
+
+	const dataParser = new XMLParser()
+	const rssXML = dataParser.parse(await data.text())
+
+	for (const item of rssXML["rss"]["channel"]["item"]) {
+		const result = await createArticle(item["link"], feed, item["title"])
+		console.log("Item url: ", result["url"])
+	}
 }

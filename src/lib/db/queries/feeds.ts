@@ -1,5 +1,5 @@
 import { db } from "..";
-import { feeds, feed_follows, users, followed_feeds } from "../schema";
+import { feeds, feed_follows, users, articles } from "../schema";
 import { getUser, getUserId, getUsernameFromId } from "./users";
 import { and, eq } from "drizzle-orm";
 
@@ -81,17 +81,3 @@ export async function getFeedId(url: string) {
 	return result[0]["id"]
 }
 
-export async function createFollowedArticle(url: string, feed_id: string, name?: string) {
-
-	if (!name) {
-		name = "None"
-	}
-
-	const result = db.insert(followed_feeds).values({
-		url: url,
-		feed_id: feed_id,
-		name: name
-	})
-		.returning()
-	return result[0]
-}

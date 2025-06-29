@@ -43,6 +43,13 @@
       "when": 1750681014880,
       "tag": "0005_thick_lockheed",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1750956315289,
+      "tag": "0006_rich_venom",
+      "breakpoints": true
     }
   ]
 }
